@@ -1,5 +1,7 @@
 \documentclass[french,11pt]{article}
 \usepackage{babel}
+\usepackage{tgheros}
+\renewcommand*\familydefault{\sfdefault} 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[a4paper]{geometry}
@@ -7,6 +9,29 @@
 \usepackage{graphicx}
 \usepackage{fancyhdr}
 \usepackage{fp}
+\usepackage{soul}
+\usepackage{booktabs}
+
+\usepackage{xcolor}  % Couleurs
+\definecolor{highlightColor}{rgb}{0.22,0.45,0.70}% light blue
+\definecolor{subduedColor}{rgb}{0.45,0.45,0.45}% dark grey
+\newcommand*{\itemizationHeaderStyle}[0]{\normalsize\color{highlightColor}}
+
+\sodef\invoiceSpacing{}{.1em}{.4em}{.4em}  % Header
+\newcommand*{\makeheader}[0]{
+	\begin{minipage}[t]{.4\linewidth} {\Huge \Denomination} \end{minipage}
+	\hfill
+	\begin{tabular}[t]{@{} c @{}}
+		{\Huge \textbf{\invoiceSpacing{FACTURE} \#\FactureNum}} \\
+		{\color{subduedColor} \today}
+	\end{tabular}
+	
+	\addvspace{2ex}
+	\Adresse \\
+	Tel: \Telephone \\
+	E-mail:  \href{mailto:\Email}{\texttt{\Email}} \\
+}
+
 
 \def\TVA{0}	% Taux de la TVA
 
@@ -34,13 +59,13 @@
 	\global\let\TotalTVA\TotalTVA
 	\global\let\TotalTTC\TotalTTC
 	
-	\cr \hline
+	\cr \midrule
 	%Total HT			& & &	\TotalHT	\cr
 	%TVA \TVA~\% 		& & &	\TotalTVA	\cr
 	%\hline \hline
-    % XXX /!\ POUR LES AUTOENTREPRENEURS TOUT EST FACTURÉ HT /!\
-	\textbf{Total HT}	& & &	\TotalHT \cr
-    {\small TVA non applicable, art 293 B du CGI}
+  % XXX /!\ POUR LES AUTOENTREPRENEURS TOUT EST FACTURÉ HT /!\
+	\textbf{\itemizationHeaderStyle Total HT}	& & &	\TotalHT \cr
+    {\small TVA non applicable, \href{https://www.legifrance.gouv.fr/affichCodeArticle.do;jsessionid=27D877242F2F459523C6ED6C33099903.tplgfr24s_2?idArticle=LEGIARTI000034596900&cidTexte=LEGITEXT000006069577&categorieLien=id&dateTexte=}{art 293 B du CGI}}
 }
 
 \newcommand*\eaddto[2]{% version développée de \addto
@@ -51,4 +76,12 @@
 } 
 
 \newcommand{\ListeProduits}{}
+
+\newcommand*{\infoSubStyle}{\small\slshape}
+\def\titleStyle{\color{highlightColor}}
+\newenvironment{infoSection}{\tabular[t]{@{} r @{\hspace{0.5em}} l}}{\endtabular}
+\newcommand{\infoBox}[2]{
+	{\titleStyle #1} & \begin{minipage}[t]{.35\textwidth} #2 \end{minipage} \\
+	\noalign{\addvspace{2ex}}
+}
 

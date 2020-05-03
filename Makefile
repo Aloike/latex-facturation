@@ -3,13 +3,13 @@ LATEX=pdflatex
 all: world clean
 
 clean:
-	rm -rf *.log *.aux
+	rm -rf factures/*.log factures/*.aux factures/*.out
 
 flush:
-	rm -rf *.pdf
+	rm -rf factures/*.pdf
 
 world: *.pdf
 
 %.pdf: %.tex
-	$(LATEX) $<
+	$(LATEX) --output-directory=factures $<
 
