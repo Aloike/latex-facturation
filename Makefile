@@ -12,4 +12,5 @@ world: *.pdf
 
 %.pdf: %.tex
 	$(LATEX) --output-directory=factures $<
+	$(LATEX) --output-directory=factures $<
 

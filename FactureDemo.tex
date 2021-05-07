@@ -1,0 +1,132 @@
+\input{.input/facture_header.tex}
+
+\input{.input/company_infos.tex}
+
+
+%%%
+
+% ------------------------------------------------------------------------------
+% Désignation facture
+% ------------------------------------------------------------------------------
+%%  @brief  Date de l'émission de la facture.
+\def\InvoiceDate		{05 Mai 2021}
+
+%%  @brief  Numérotation de la facture.
+\def\InvoiceNumber		{YYYYMMNNN}
+
+\def\CompanyInternalRef {PYYYY-NNN}
+\def\ClientInternalRef  {12345678901234567890}
+
+
+% Lieu de l'édition de la facture
+\def\FactureLieu	{InvoiceCity}
+
+%%  @brief  Objet du document
+\def\InvoiceSubject	{Facture pour prestations d'ingénierie.}
+
+%%  @brief  Description de la facture
+\def\InvoiceDetails	{
+    Description de la réalisation.
+}
+
+
+% ------------------------------------------------------------------------------
+% Infos Client
+% ------------------------------------------------------------------------------
+
+%%  @brief  Nom du client.
+\def\ClientNom{Nom du client}
+
+%%  @brief  Adresse postale du client.
+\def\ClientAdresse{
+    Bâtiment X \\
+    46 RUE DES FACTRICES \\
+    87160 ARNAC LA POSTE CEDEX 7
+}
+
+%%  @brief  Adresse email du client.
+\def\ClientEmail{contact-client@example.com}
+
+%%  @brief  Num de téléphone du client.
+\def\ClientPhone{+33(0)N NN NN NN NN}
+
+%%  @brief  Adresse de facturation, si différente de l'adresse principale.
+\def\ClientAdresseInvoicing{
+    Bâtiment Y \\
+    47 RUE DES FACTEURS \\
+    87160 ARNAC LA POSTE CEDEX 7
+}
+
+
+% ------------------------------------------------------------------------------
+% Liste des produits facturés : Désignation, quantité, prix unitaire HT
+% ------------------------------------------------------------------------------
+\ProductAdd	{Élement} {1} {1337}
+\ProductAdd	{Autre élement} {42} {4.04}
+\ProductAdd	{Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.} {45} {418}
+
+% \usepackage{draftwatermark}
+
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+\ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+% \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
+
+
+
+% ------------------------------------------------------------------------------
+%   Détails acquittement
+% ------------------------------------------------------------------------------
+% Facture acquittée : oui/non
+\def\FactureAcquittee	{non}
+
+
+
+\input{.input/facture_footer.tex}

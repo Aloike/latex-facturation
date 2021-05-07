@@ -12,44 +12,324 @@
 \usepackage{soul}
 \usepackage{booktabs}
 
-\usepackage{xcolor}  % Couleurs
+\usepackage{adjustbox}
+\usepackage{booktabs}
+\usepackage{etoolbox}
+\usepackage{eurosym}
+\usepackage{lastpage}
+\usepackage{layouts}
+% \usepackage{showframe}   %% just for demo
+% \usepackage{tabularx}
+\usepackage{ltablex} % Must be added after tabularx ?
+\keepXColumns %% If not added, ltablex/tabularx will treat X columns as l columns whenever possible...
+
+
+\usepackage[table]{xcolor}  % Couleurs
 \definecolor{highlightColor}{rgb}{0.22,0.45,0.70}% light blue
 \definecolor{subduedColor}{rgb}{0.45,0.45,0.45}% dark grey
-\newcommand*{\itemizationHeaderStyle}[0]{\normalsize\color{highlightColor}}
 
-\sodef\invoiceSpacing{}{.1em}{.4em}{.4em}  % Header
-\newcommand*{\makeheader}[0]{
-	\begin{minipage}[t]{.4\linewidth} {\Huge \Denomination} \end{minipage}
-	\hfill
-	\begin{tabular}[t]{@{} c @{}}
-		{\Huge \textbf{\invoiceSpacing{FACTURE} \#\FactureNum}} \\
-		{\color{subduedColor} \today}
-	\end{tabular}
-	
-	\addvspace{2ex}
-	\Adresse \\
-	Tel: \Telephone \\
-	E-mail:  \href{mailto:\Email}{\texttt{\Email}} \\
-}
+\input{.input/utils.tex}
 
 
-\def\TVA{0}	% Taux de la TVA
+%% Taux de la TVA
+\def\TVA{0}
 
+% Initialisation de variables utilisees plus loin
 \def\TotalHT{0}
 \def\TotalTVA{0}
 
-\newcommand{\AjouterProduit}[3]{%	Arguments : Désignation, quantité, prix unitaire HT
+\def\_header_spacingLeft{8.0cm}
+
+\newcommand*{\itemizationHeaderStyle}[0]{\normalsize\color{highlightColor}}
+
+% ##############################################################################
+% ##############################################################################
+%%  @brief  Version développée de \addto
+\newcommand*\eaddto[2]{
+   \edef\tmp{#2}%
+   \expandafter\addto
+   \expandafter#1%
+   \expandafter{\tmp}%
+}
+
+% ##############################################################################
+% ##############################################################################
+
+\newcommand{\infoBox}[2]{
+	{\titleStyle #1} & \begin{minipage}[t]{.35\textwidth} #2 \end{minipage} \\
+	\noalign{\addvspace{2ex}}
+}
+
+% ##############################################################################
+% ##############################################################################
+
+\def\titleStyle{\color{highlightColor}}
+
+\newcommand*{\infoSubStyle}{\small\slshape}
+
+% ##############################################################################
+% ##############################################################################
+
+\newcommand*{\CompanyContactMinipage}{
+	% \begin{minipage}[t]{.4\linewidth} {
+	\begin{minipage}[t]{.5\textwidth} {
+		% \Huge 
+		\textbf{\CompanyName} \\
+		\CompanyAddress \\
+		Tel: \CompanyPhone \\
+		E-mail:  \href{mailto:\CompanyEmail}{\texttt{\CompanyEmail}} \\
+	}
+	\end{minipage}
+}
+
+% ##############################################################################
+% ##############################################################################
+
+\newcommand*{\InvoiceComplementaryInfos}{
+	\textbf{Informations complémentaires :}~\\
+	\small
+	Paiement sous 10 jours après réception.
+
+	% XXX /!\ POUR LES AUTOENTREPRENEURS TOUT EST FACTURÉ HT /!\
+	TVA non applicable conformément à \href{https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042159618/}{l'Article 293 B du CGI}.
+
+	% \InvoiceDetails
+}
+
+% ##############################################################################
+% ##############################################################################
+
+\newcommand*{\InvoiceReferences}{
+}
+
+% ##############################################################################
+% ##############################################################################
+
+%%  @brief  Defines a cusom letterspacing that will be used in the header.
+\sodef\invoiceSpacing{}{.1em}{.4em}{.4em}  % Header
+
+\newcommand*{\InvoiceTitle}{
+
+	\begin{minipage}[t]{\textwidth}
+	% 	% Add the "invoice" title
+		\begin{center}
+			\Huge{\textbf{\invoiceSpacing{FACTURE}}}
+		\end{center}
+	% 	\normalsize
+	% 	% Add mandatory invoice references
+	% 	\begin{tabular}{ll}
+	% 		\color{subduedColor}Num : & \#\InvoiceNumber \cr
+	% 		\color{subduedColor}Date : & \InvoiceDate \cr
+
+	% 		\ifdefempty{\CompanyInternalRef}{}{
+	% 			\color{subduedColor}Notre ref : & \CompanyInternalRef \cr
+	% 		}
+
+	% 		\ifdefempty{\ClientInternalRef}{}{
+	% 			\color{subduedColor}Votre ref : & \ClientInternalRef \cr
+	% 		}
+	% 	\end{tabular}
+	\end{minipage}
+}
+
+% ##############################################################################
+% ##############################################################################
+%
+%%  @brief  This command generates the document header.
+%%
+%%  It includes contact informations for both the company and the client, but
+%%  also some mandatory informations like the invoice date and number.
+%
+\newcommand*{\makeheader}[0]{
+
+	\begin{tabularx}{\textwidth}{X X}
+		% \midrule
+		\CompanyContactMinipage & \MinipageInvoiceReferences \cr
+		% \CompanyContactMinipage & \InvoiceReferences \cr
+		\midrule
+		\MinipageClientContact & \MinipageClientInvoiceAddress \cr
+		\midrule
+		\cr
+		& À \FactureLieu, le \InvoiceDate
+	\end{tabularx}
+	% \newline
+}
+
+% ##############################################################################
+% ##############################################################################
+
+\newcommand*{\MinipageClientContact}{
+	\begin{minipage}[t]{.5\textwidth}{
+		\textcolor{subduedColor}{Client :}\\
+		\textbf{\ClientNom} \\
+		\ClientAdresse\\
+		% \\ %\vspace{1.2em}
+		E-mail : \href{mailto:\ClientEmail}{\ClientEmail}\\
+		Tel. : \ClientPhone
+	}
+	\end{minipage}
+}
+
+% ##############################################################################
+% ##############################################################################
+
+\newcommand*{\MinipageClientInvoiceAddress}{
+	% \begin{minipage}[t]{.5\textwidth} {
+	% 	% \Huge 
+	% 	\textbf{\CompanyName} \\
+	% 	\CompanyAddress \\
+	% 	Tel: \CompanyPhone \\
+	% 	E-mail:  \href{mailto:\CompanyEmail}{\texttt{\CompanyEmail}} \\
+	% }
+	% \end{minipage}
+	% \begin{infoSection}
+	% 	\infoBox{Facturation}{\textbf{\ClientNom} \\
+	% 	\ClientAdresse}
+	% \end{infoSection}
+	\begin{minipage}[t]{.5\textwidth}{
+		\textcolor{subduedColor}{Facturation :}\\
+		\textbf{\ClientNom} \\
+		\ifdef{\ClientAdresseInvoicing}{
+			\ClientAdresseInvoicing
+		}{
+			\ClientAdresse
+		}
+	}
+	\end{minipage}
+}
+
+% ##############################################################################
+% ##############################################################################
+
+\newcommand*{\MinipageInvoiceReferences}{
+	\fbox{
+		\begin{minipage}[t]{\linewidth}{
+			\InvoiceTitle \\
+			~\\
+			\begin{tabular}[t]{ll}
+				%
+				% Mandatory invoice references
+				%
+				\color{subduedColor}Num : & \#\InvoiceNumber \cr
+				\color{subduedColor}Date : & \InvoiceDate \cr
+	
+				%
+				%	Optional invoice references
+				%
+				\color{subduedColor}Notre ref : &
+				\ifdefempty{\CompanyInternalRef}{}{
+					\CompanyInternalRef
+				}{
+					% N/A
+				}
+				\cr
+	
+				\color{subduedColor}Votre ref : &
+				\ifdef{\ClientInternalRef}{
+					\ClientInternalRef
+				}{
+					% N/A
+				}
+				\cr
+			\end{tabular}
+		}
+		\end{minipage}
+	}
+}
+
+% ##############################################################################
+% ##############################################################################
+
+\newcommand{\PaymentConditions}{
+	\begin{minipage}{\linewidth}
+		\ifthenelse{\equal{\FactureAcquittee}{oui}}{
+			Facture acquittée.
+		}{
+			À régler par virement bancaire :
+			\begin{center}
+				\begin{tabular}{|c c c c|}
+					\midrule 	\itemizationHeaderStyle \textbf{Code BIC}		& \multicolumn{3}{|l|}{ \texttt{\CompanyBIC} } 		\\
+					\midrule 	\itemizationHeaderStyle \textbf{IBAN Nº}		& \multicolumn{3}{|l|}{ \texttt{\CompanyIBAN} } 		\\
+					\midrule 	\itemizationHeaderStyle \textbf{Code banque}	& \itemizationHeaderStyle \textbf{Code guichet}	& \itemizationHeaderStyle \textbf{Nº de Compte}		& \itemizationHeaderStyle \textbf{Clé RIB}	\\
+							\texttt{\CompanyRibCodeBanque}					& \texttt{\CompanyRibCodeGuichet}		 			& \texttt{\CompanyRibNumCompte}				& \texttt{\CompanyRibClef}				\\
+					\midrule
+				\end{tabular}
+			\end{center}
+		}
+		~\\
+	\end{minipage}
+}
+
+% ##############################################################################
+% ##############################################################################
+%%  @brief  Ajoute une ligne dans le tableau des produits à facturer.
+%%  Arguments : Désignation, quantité, prix unitaire HT
+%%
+%%  @param  #1  Désignation du produit
+%%  @param  #2  Quantité de produits à facturer
+%%  @param  #3  Prix unitaire HT du produit
+%
+\newcommand{\ProductAdd}[3]{
 	\FPround{\prix}{#3}{2}
 	\FPeval{\montant}{#2 * #3}
 	\FPround{\montant}{\montant}{2}
 	\FPadd{\TotalHT}{\TotalHT}{\montant}
 	
-	\eaddto\ListeProduits{#1	&	\prix	&	#2	&	\montant	\cr}
+	\ifdefempty{\ProductsList}{}{
+		\eaddto\ProductsList{\cr}
+	}
+	% \eaddto\ProductsList{#1	&	\prix	&	#2	&	\montant	\cr}
+	% \eaddto\ProductsList{#1	&	\prix	&	#2	&	\montant	\cr}
+	\eaddto\ProductsList{#1	&	\prix	&	#2	&	\montant}
 }
 
-\newcommand{\AfficheResultat}{%
-	\ListeProduits
-	
+% ##############################################################################
+% ##############################################################################
+
+\newcommand{\ProductsList}{}
+
+% ##############################################################################
+% ##############################################################################
+
+\newcommand{\ProductsTable}
+{
+	{
+		\rowcolors{2}{}{gray!20}
+		\renewcommand{\arraystretch}{1.5}
+
+		% \begin{tabular}{p{0.5\linewidth}rrr}
+		\begin{tabularx}{\textwidth}{Xrrr}
+			\hiderowcolors
+			% \caption{Détails des produits/services facturés.}\\\toprule\endfirsthead
+			% \toprule\endhead
+			% Set a footer for long tables
+			\midrule \multicolumn{3}{r}{\itshape continues on next page}\\\midrule\endfoot
+			% % Set the last footer
+			% \bottomrule\endlastfoot
+			\endlastfoot
+			% Set the first table header
+			\textbf{\itemizationHeaderStyle Désignation ~~~~~~}	& \textbf{\itemizationHeaderStyle P.U. (\euro HT)}	& \textbf{\itemizationHeaderStyle Qté.}	& \textbf{\itemizationHeaderStyle Total (\euro HT)} \\\midrule \endfirsthead
+			% Set the "continued" table header
+			\textit{(continued)} \\
+			\textbf{\itemizationHeaderStyle Désignation ~~~~~~}	& \textbf{\itemizationHeaderStyle P.U. (\euro HT)}	& \textbf{\itemizationHeaderStyle Qté.}	& \textbf{\itemizationHeaderStyle Total (\euro HT)} \\\midrule \endhead
+			% \midrule
+			\showrowcolors
+
+			% Add the products list
+			\ProductsList \cr
+			% Add table totals lines
+			\ProductsTableTotal
+		\end{tabularx}
+	}
+}
+
+% ##############################################################################
+% ##############################################################################
+
+\newcommand{\ProductsTableTotal}{
+	% \rowcolors{2}{white}{white}
+	% \rowcolor{white}
+	\hiderowcolors
 	\FPeval{\TotalTVA}{\TotalHT * \TVA / 100}
 	\FPadd{\TotalTTC}{\TotalHT}{\TotalTVA}
 	\FPround{\TotalHT}{\TotalHT}{2}
@@ -57,31 +337,28 @@
 	\FPround{\TotalTTC}{\TotalTTC}{2}
 	\global\let\TotalHT\TotalHT
 	\global\let\TotalTVA\TotalTVA
-	\global\let\TotalTTC\TotalTTC
-	
-	\cr \midrule
+	\global\let\TotalTTC\TotalTTC \cr
+	\midrule
+	% Spacing between last horizontal rule and totals
+	% \rowcolor{white} \cr
 	%Total HT			& & &	\TotalHT	\cr
 	%TVA \TVA~\% 		& & &	\TotalTVA	\cr
 	%\hline \hline
   % XXX /!\ POUR LES AUTOENTREPRENEURS TOUT EST FACTURÉ HT /!\
-	\textbf{\itemizationHeaderStyle Total HT}	& & &	\TotalHT \cr
-    {\small TVA non applicable, \href{https://www.legifrance.gouv.fr/affichCodeArticle.do;jsessionid=27D877242F2F459523C6ED6C33099903.tplgfr24s_2?idArticle=LEGIARTI000034596900&cidTexte=LEGITEXT000006069577&categorieLien=id&dateTexte=}{art 293 B du CGI}}
+	% \textbf{\itemizationHeaderStyle Total (EUR HT)}	& & &	\TotalHT
+	& \multicolumn{2}{l}{\textbf{\itemizationHeaderStyle Total (EUR HT)}} & \textbf{\TotalHT \euro} \\
+	\cline{2-4}
+	\showrowcolors
 }
 
-\newcommand*\eaddto[2]{% version développée de \addto
-   \edef\tmp{#2}%
-   \expandafter\addto
-   \expandafter#1%
-   \expandafter{\tmp}%
-} 
+% ##############################################################################
+% ##############################################################################
 
-\newcommand{\ListeProduits}{}
-
-\newcommand*{\infoSubStyle}{\small\slshape}
-\def\titleStyle{\color{highlightColor}}
-\newenvironment{infoSection}{\tabular[t]{@{} r @{\hspace{0.5em}} l}}{\endtabular}
-\newcommand{\infoBox}[2]{
-	{\titleStyle #1} & \begin{minipage}[t]{.35\textwidth} #2 \end{minipage} \\
-	\noalign{\addvspace{2ex}}
+\newenvironment{infoSection}{
+	\tabular[t]{@{} r @{\hspace{0.5em}} l}
+}{
+	\endtabular
 }
 
+% ##############################################################################
+% ##############################################################################
