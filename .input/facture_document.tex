@@ -13,56 +13,6 @@
     filecolor=black,
     urlcolor=black]{hyperref}
 
-\geometry{verbose,tmargin=4em,bmargin=8em,lmargin=6em,rmargin=6em}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
-
-\thispagestyle{fancy}
-\pagestyle{fancy}
-\setlength{\parindent}{0pt}
-
-
-\renewcommand{\headrulewidth}{0pt}
-
-
-% \fancyhead[L]{
-% 	\CompanyContactMinipage
-% }
-% \fancyhead[C]{
-% 	\InvoiceTitle
-% }
-% \fancyhead[R]{
-% 	\#\InvoiceNumber \\
-% 	\InvoiceDate
-% }
-
-% ------------------------------------------------------------------------------
-%	Definition of the footer
-% ------------------------------------------------------------------------------
-\renewcommand{\footrulewidth}{0.5pt}
-
-\fancyfoot[L]{
-	Facture \\
-	\#\InvoiceNumber \\
-	\InvoiceDate
-}
-
-\fancyfoot[C]{
-	\small{
-		\CompanyName \\
-		Téléphone: \CompanyPhone ~--~ E-mail : \href{mailto:\CompanyEmail}{\texttt{\CompanyEmail}}\\
-		SIRET \CompanySiret ~--~ Code APE \CompanyAPE}\\
-	\tiny{
-		\vspace{1.2em}
-		Dispensé d'immatriculation au registre du commerce et des sociétés et au répertoire des métiers
-	}
-}
-
-\fancyfoot[R]{
-	~\\
-	\thepage / \pageref{LastPage}
-}
-
 % ##############################################################################
 % ##############################################################################
 %	Document
@@ -70,6 +20,7 @@
 
 \begin{document}
 
+\thispagestyle{pagestyle_firstpage}
 
 % ------------------------------------------------------------------------------
 %	Generate the invoice header
@@ -119,6 +70,5 @@
 
 % \vspace{1em}
 % \doublerulefill
-
 
 \end{document}

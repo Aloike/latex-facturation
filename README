@@ -1,6 +1,6 @@
 Ce package contient tout ce qu'il faut pour editer des factures en LaTeX tres rapidement :
 
-* Commencer par editer le fichier .input/facture_footer.tex pour le personaliser
+* Commencer par editer le fichier .input/facture_document.tex pour le personaliser
 * Renommer/Copier le fichier main.tex et y modifier le client et ajouter des lignes de facturation
 * tapez "make"
  * "make world" va compiler les pdf en laissant les aux et log de latex

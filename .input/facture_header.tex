@@ -28,6 +28,8 @@
 \definecolor{highlightColor}{rgb}{0.22,0.45,0.70}% light blue
 \definecolor{subduedColor}{rgb}{0.45,0.45,0.45}% dark grey
 
+
+\input{.input/style.tex}
 \input{.input/utils.tex}
 
 
@@ -109,26 +111,11 @@
 \sodef\invoiceSpacing{}{.1em}{.4em}{.4em}  % Header
 
 \newcommand*{\InvoiceTitle}{
-
 	\begin{minipage}[t]{\textwidth}
 	% 	% Add the "invoice" title
 		\begin{center}
 			\Huge{\textbf{\invoiceSpacing{FACTURE}}}
 		\end{center}
-	% 	\normalsize
-	% 	% Add mandatory invoice references
-	% 	\begin{tabular}{ll}
-	% 		\color{subduedColor}Num : & \#\InvoiceNumber \cr
-	% 		\color{subduedColor}Date : & \InvoiceDate \cr
-
-	% 		\ifdefempty{\CompanyInternalRef}{}{
-	% 			\color{subduedColor}Notre ref : & \CompanyInternalRef \cr
-	% 		}
-
-	% 		\ifdefempty{\ClientInternalRef}{}{
-	% 			\color{subduedColor}Votre ref : & \ClientInternalRef \cr
-	% 		}
-	% 	\end{tabular}
 	\end{minipage}
 }
 
@@ -299,19 +286,36 @@
 
 		% \begin{tabular}{p{0.5\linewidth}rrr}
 		\begin{tabularx}{\textwidth}{Xrrr}
-			\hiderowcolors
 			% \caption{Détails des produits/services facturés.}\\\toprule\endfirsthead
 			% \toprule\endhead
+
 			% Set a footer for long tables
-			\midrule \multicolumn{3}{r}{\itshape continues on next page}\\\midrule\endfoot
+			\hiderowcolors
+			\midrule
+			% \rowcolor{gray!50}
+			\multicolumn{3}{r}{\itshape (continues on next page)} & \\
+			% \midrule
+			\endfoot
+
 			% % Set the last footer
 			% \bottomrule\endlastfoot
 			\endlastfoot
+			\hiderowcolors
+
 			% Set the first table header
-			\textbf{\itemizationHeaderStyle Désignation ~~~~~~}	& \textbf{\itemizationHeaderStyle P.U. (\euro HT)}	& \textbf{\itemizationHeaderStyle Qté.}	& \textbf{\itemizationHeaderStyle Total (\euro HT)} \\\midrule \endfirsthead
-			% Set the "continued" table header
-			\textit{(continued)} \\
-			\textbf{\itemizationHeaderStyle Désignation ~~~~~~}	& \textbf{\itemizationHeaderStyle P.U. (\euro HT)}	& \textbf{\itemizationHeaderStyle Qté.}	& \textbf{\itemizationHeaderStyle Total (\euro HT)} \\\midrule \endhead
+			\textbf{\itemizationHeaderStyle Désignation ~~~~~~}	& \textbf{\itemizationHeaderStyle P.U. (\euro HT)}	& \textbf{\itemizationHeaderStyle Qté.}	& \textbf{\itemizationHeaderStyle Total (\euro HT)} \\
+			\midrule
+			\endfirsthead
+
+			% Set the "continued" (default) table header
+			% \rowcolor{gray!50}
+			\textit{(continued)} & & & \\
+			% \midrule
+			\hiderowcolors
+			\textbf{\itemizationHeaderStyle Désignation ~~~~~~}	& \textbf{\itemizationHeaderStyle P.U. (\euro HT)}	& \textbf{\itemizationHeaderStyle Qté.}	& \textbf{\itemizationHeaderStyle Total (\euro HT)} \\
+			\midrule
+			\endhead
+
 			% \midrule
 			\showrowcolors
 

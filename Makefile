@@ -1,4 +1,6 @@
 LATEX=pdflatex
+LATEX_OPTIONS:=-halt-on-error -interaction=nonstopmode --output-directory=factures
+
 
 all: world clean
 
@@ -11,6 +13,5 @@ flush:
 world: *.pdf
 
 %.pdf: %.tex
-	$(LATEX) --output-directory=factures $<
-	$(LATEX) --output-directory=factures $<
-
+	$(LATEX) $(LATEX_OPTIONS) $<
+	$(LATEX) $(LATEX_OPTIONS) $<
