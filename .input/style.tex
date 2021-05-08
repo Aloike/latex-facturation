@@ -1,6 +1,12 @@
 
 % \geometry{verbose,tmargin=4em,bmargin=8em,lmargin=6em,rmargin=6em}
-\geometry{verbose,tmargin=2cm,bmargin=3cm,lmargin=2cm,rmargin=2cm}
+\geometry{
+	verbose,
+	tmargin=2cm,
+	bmargin=3cm,
+	lmargin=2cm,
+	rmargin=2cm
+}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
@@ -120,7 +126,7 @@
 \fancypagestyle{pagestyle_firstpage}
 {
 	% Make the top margin of the page thinner
-	\vspace*{-1cm}
+	% \vspace*{-1cm} % Not a good solution as it also changes the bottom margin...
 
 
 	% Remove the rule at the bottom of the header

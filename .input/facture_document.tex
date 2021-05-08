@@ -20,7 +20,30 @@
 
 \begin{document}
 
+
 \thispagestyle{pagestyle_firstpage}
+
+%%  Default geometry
+\newgeometry{
+	tmargin=2cm,
+	bmargin=3cm,
+	lmargin=2cm,
+	rmargin=2cm
+}
+
+%%  Géometrie page de garde
+\newgeometry{
+    tmargin=1cm,
+    bmargin=3cm,
+    lmargin=2cm,
+    rmargin=2cm
+}
+
+%%  Trick to reset geometry on second page;
+%%  See https://tex.stackexchange.com/a/478566/166035
+%%  This line registers the reset-hook:
+\AddEverypageHook{\ifnum\value{page}=2\restoregeometry\else\fi}
+
 
 % ------------------------------------------------------------------------------
 %	Generate the invoice header
