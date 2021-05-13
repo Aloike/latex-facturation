@@ -10,21 +10,19 @@
 \usepackage{fancyhdr}
 \usepackage{fp}
 \usepackage{soul}
-\usepackage{booktabs}
 
 \usepackage{adjustbox}
-% \usepackage{afterpage}
 \usepackage{booktabs}
 \usepackage{etoolbox}
 \usepackage{eurosym}
 \usepackage{everypage} 	%use this package to get the "on-every-page-do-this-Hook" below
 \usepackage{lastpage}
 \usepackage{layouts}
-% \usepackage{showframe}   %% just for demo
-% \usepackage{tabularx}
-\usepackage{ltablex} % Must be added after tabularx ?
-\keepXColumns %% If not added, ltablex/tabularx will treat X columns as l columns whenever possible...
+% \usepackage{showframe}  %%< Useful when working on geometry.
 
+
+\usepackage{ltablex} % Imports tabularx
+\keepXColumns %% If not added, ltablex/tabularx will treat X columns as l columns whenever possible...
 
 \usepackage[table]{xcolor}  % Couleurs
 \definecolor{highlightColor}{rgb}{0.22,0.45,0.70}% light blue
