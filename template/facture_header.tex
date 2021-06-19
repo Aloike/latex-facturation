@@ -15,6 +15,20 @@
 \usepackage{etoolbox}
 \usepackage{eurosym}
 \usepackage{everypage} 	%use this package to get the "on-every-page-do-this-Hook" below
+\usepackage[plainpages=false,
+    pdfcenterwindow=true,
+    pdftoolbar=false,
+    pdfmenubar=false,
+    pdfauthor={\CompanyName},
+    pdftitle={Facture \InvoiceNumber\ -- \CompanyName},
+    pdfsubject={Facture \InvoiceNumber},
+    pdfkeywords={},
+    pdfproducer={Latex with hyperref},
+    pdfcreator={pdflatex},
+    linkcolor=black,
+    citecolor=black,
+    filecolor=black,
+    urlcolor=black]{hyperref}
 \usepackage{lastpage}
 \usepackage{layouts}
 
@@ -268,6 +282,59 @@
 	% \eaddto\ProductsList{#1	&	\prix	&	#2	&	\montant	\cr}
 	\eaddto\ProductsList{#1	&	\prix	&	#2	&	\montant}
 }
+
+% ##############################################################################
+% ##############################################################################
+\newcounter{counterRefsDetailedItems}
+% \newcommand{\refDetailedItemLabel}{ref_detailedItem_unknown}
+
+%%  @brief  Ajoute une ligne dans le tableau des produits à facturer et un
+%%          paragraphe descriptif en fin de document.
+%%
+%%  @param  #1  Désignation du produit
+%%  @param  #2  Quantité de produits à facturer
+%%  @param  #3  Prix unitaire HT du produit
+%%  @param  #4  Paragraphe descriptif.
+%
+\newcommand{\ProductAddWithDetails}[4]{
+	\FPround{\prix}{#3}{2}
+	\FPeval{\montant}{#2 * #3}
+	\FPround{\montant}{\montant}{2}
+	\FPadd{\TotalHT}{\TotalHT}{\montant}
+
+	% Increment refs counter
+	\addtocounter{counterRefsDetailedItems}{1}
+	\edef\refDetailedItemLabel{ref_detailedItem_\thecounterRefsDetailedItems}
+	\message{the detailed item ref label is: \refDetailedItemLabel}
+
+
+	\ifdefempty{\ProductsList}{}{
+		\eaddto\ProductsList{\cr}
+	}
+	% \eaddto\ProductsList{#1	&	\prix	&	#2	&	\montant	\cr}
+	% \eaddto\ProductsList{#1	&	\prix	&	#2	&	\montant	\cr}
+	% \eaddto\ProductsList{#1	&	\prix	&	#2	&	\montant}
+	% \addto\ProductsList{#1 \expandafter\hyperref[\refDetailedItemLabel]{\textit{(see details)}}	&	\prix	&	#2	&	\montant}
+	% \eaddto\ProductsList{#1	&	\prix	&	#2	&	\montant}
+	\eaddto\ProductsList{\noexpand\hyperref[\refDetailedItemLabel]{#1}	&	\prix	&	#2	&	\montant}
+	% \eaddto\ProductsList{\expandafter\hyperref[\refDetailedItemLabel]{#1}	&	\prix	&	#2	&	\montant}
+
+	%
+	%   Add the product details paragraph
+	%
+	% \ifdefempty{\ProductsDetailsSections}{}{
+	% 	\addto\ProductsDetailsSections{\cr}
+	% }
+	\eaddto\ProductsDetailsSections{
+		\noexpand\subsection{#1} \noexpand\label{\refDetailedItemLabel}
+		#4
+	}
+}
+
+% ##############################################################################
+% ##############################################################################
+
+\newcommand{\ProductsDetailsSections}{}
 
 % ##############################################################################
 % ##############################################################################

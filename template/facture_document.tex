@@ -1,18 +1,3 @@
-\usepackage[plainpages=false,
-    pdfcenterwindow=true,
-    pdftoolbar=false,
-    pdfmenubar=false,
-    pdfauthor={\CompanyName},
-    pdftitle={Facture \InvoiceNumber\ -- \CompanyName},
-    pdfsubject={Facture \InvoiceNumber},
-    pdfkeywords={},
-    pdfproducer={Latex with hyperref},
-    pdfcreator={pdflatex},
-    linkcolor=black,
-    citecolor=black,
-    filecolor=black,
-    urlcolor=black]{hyperref}
-
 % ##############################################################################
 % ##############################################################################
 %	Document
@@ -117,6 +102,15 @@
     \doublerulefill
 \end{minipage}
 
+
+% ------------------------------------------------------------------------------
+%	Insert items details
+% ------------------------------------------------------------------------------
+
+\newpage
+\section{Detailed items}
+
+\ProductsDetailsSections
 
 
 \end{document}
