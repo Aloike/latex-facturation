@@ -311,13 +311,9 @@
 	\ifdefempty{\ProductsList}{}{
 		\eaddto\ProductsList{\cr}
 	}
-	% \eaddto\ProductsList{#1	&	\prix	&	#2	&	\montant	\cr}
-	% \eaddto\ProductsList{#1	&	\prix	&	#2	&	\montant	\cr}
-	% \eaddto\ProductsList{#1	&	\prix	&	#2	&	\montant}
-	% \addto\ProductsList{#1 \expandafter\hyperref[\refDetailedItemLabel]{\textit{(see details)}}	&	\prix	&	#2	&	\montant}
-	% \eaddto\ProductsList{#1	&	\prix	&	#2	&	\montant}
-	\eaddto\ProductsList{\noexpand\hyperref[\refDetailedItemLabel]{#1}	&	\prix	&	#2	&	\montant}
-	% \eaddto\ProductsList{\expandafter\hyperref[\refDetailedItemLabel]{#1}	&	\prix	&	#2	&	\montant}
+
+	\eaddto\ProductsList{#1 \mbox{\noexpand\hyperref[\refDetailedItemLabel]{\noexpand\textit{(see details)}}}	&	\prix	&	#2	&	\montant}
+
 
 	%
 	%   Add the product details paragraph
