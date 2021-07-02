@@ -1,10 +1,7 @@
-\input{.input/facture_header.tex}
-
-
 % ------------------------------------------------------------------------------
 % Informations sur l'entreprise emettrice
 % ------------------------------------------------------------------------------
-\input{.input/company_infos.tex}
+\input{template/company_infos.tex}
 
 
 
@@ -61,9 +58,16 @@
 }
 
 
+
 % ------------------------------------------------------------------------------
 % Liste des produits facturés : Désignation, quantité, prix unitaire HT
 % ------------------------------------------------------------------------------
+
+% This input has to be here as it both needs some definitions of company/client
+% infos and also defines elements needed in the following product lines.
+\input{template/facture_header.tex}
+
+
 \ProductAdd	{Élement} {1} {1337}
 \ProductAdd	{Autre élement} {42} {4.04}
 \ProductAdd	{Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.} {45} {418}
@@ -89,6 +93,9 @@
 \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
 \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
 
+\ProductAddWithDetails	{This is to test detailed product line.}{1}{2}{This is the details subsection.}
+\ProductAddWithDetails	{This is to test another detailed product line.}{10}{20}{This is another details subsection.}
+
 
 
 % ------------------------------------------------------------------------------
@@ -99,4 +106,4 @@
 
 
 
-\input{.input/facture_document.tex}
+\input{template/facture_document.tex}

@@ -1,18 +1,30 @@
+\usepackage{changepage}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
 
-\geometry{
-	verbose,
-	tmargin=2cm,
-	bmargin=3cm,
-	lmargin=2cm,
-	rmargin=2cm
+
+% Space between \paragraph titles (different from paragraphs!)
+% See https://tex.stackexchange.com/a/4896/166035
+% And https://tex.stackexchange.com/a/509643/166035
+\titlespacing*{\paragraph}{
+	% Left margin
+	0pt
+}{
+	% Space before (vertical)
+	0.5\baselineskip plus 1ex minus .2ex
+}{
+	% Space after (horizontal)
+	1em
 }
 
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+% Space between paragraphs, with an hysteresis of "plus"/"minus" given values
+% \setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
 
-\thispagestyle{fancy}
+% \setlength{\parindent}{0pt}
+
+
+% \thispagestyle{fancy}
 \pagestyle{fancy}
-\setlength{\parindent}{0pt}
 
 
 % ##############################################################################
@@ -20,8 +32,8 @@
 %	Headers / Footers
 % ##############################################################################
 
-\renewcommand{\headrulewidth}{0.5pt}
-\renewcommand{\footrulewidth}{0.5pt}
+% \renewcommand{\headrulewidth}{0.5pt}
+
 
 % ------------------------------------------------------------------------------
 %	Definition of default header and footer
@@ -65,6 +77,7 @@
 
 \newcommand{\FooterDefaultC}{
 	\small{
+		% \vspace{0.5em}
 		\CompanyName \\
 	}
 	\footnotesize{
@@ -72,7 +85,8 @@
 		SIRET \CompanySiret ~--~ Code APE \CompanyAPE\\
 	}
 	\tiny{
-		\vspace{1.2em}
+		% \vspace{1.2em}
+		\vspace{1.0em}
 		Dispensé d'immatriculation au registre du commerce et des sociétés et au répertoire des métiers
 	}
 }
@@ -82,7 +96,8 @@
 	% Facture \\
 	% \#\InvoiceNumber \\
 	% \InvoiceDate \\
-	~\\
+	% ~\\
+	\vspace{1.0em}
 	Page \thepage / \pageref{LastPage}
 }
 
@@ -105,25 +120,91 @@
 }
 
 
+\newcommand{\footerOffset}{- \geometryFootSkip + 5mm}
+
+% \renewcommand{\footrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{1pt}
+\renewcommand{\footrule}{%
+	% \checkoddpage
+	% \ifoddpage
+	% 	\hfill
+	% \else
+	% \fi
+	% \vspace{- \geometryFootSkip}
+	% \vspace{ \footerOffset }
+	% \rule{\textwidth}{\footrulewidth}
+	% \vskip \geometryFootSkip
+}
+
+
 \fancyfoot[L]{
+	\vspace{ \footerOffset }
 	\FooterDefaultL
 }
 
 \fancyfoot[C]{
+	% \vspace{- \geometryMarginBottom}
+	\vspace{ \footerOffset }
+	\rule{\textwidth}{\footrulewidth}
 	\FooterDefaultC
 }
 
 \fancyfoot[R]{
+	% \vspace{- \geometryFootSkip}
+	\vspace{ \footerOffset }
 	\FooterDefaultR
 }
-
-
 
 % ------------------------------------------------------------------------------
 %	Definition of a pagestyle for the first page header and footer
 % ------------------------------------------------------------------------------
 \fancypagestyle{pagestyle_firstpage}
 {
+	\pagestyle{fancy}
+
+	\changepage{
+		% Text height
+	}{
+		% Text width
+	}{
+		% Even side margin
+	}{
+		% Odd side margin
+	}{
+		% Column sep
+	}{
+		% Top margin
+		- 2cm
+	}{
+		% Head height
+	}{
+		% Head sep
+	}{
+		% Foot skip
+		2cm
+	}
+
+	% \setlength{\headheight}{1cm}
+
+	% \newlength{\geometryVerticalOffsetPdg}
+	% \setlength{\geometryVerticalOffsetPdg}{-1in}%< offset is added to a 1in margin, so remove it for calculations.
+	% \addtolength{\geometryVerticalOffsetPdg}{1cm} %< This will be the actual margin.
+	% \setlength{\voffset}{\geometryVerticalOffsetPdg}
+
+	% %  Géometrie page de garde
+	% \newgeometry{
+	% 	tmargin=1cm,
+	% 	bmargin=\geometryMarginBottom, %3cm,
+	% 	lmargin=\geometryMarginLeft, %2cm,
+	% 	rmargin=\geometryMarginRight, %2cm
+	% }
+	% \newlength{\geometryTextHeightPdg}
+	% \setlength{\geometryTextHeightPdg}{\paperheight}
+	% \addtolength{\geometryTextHeightPdg}{- 1cm}
+	% \addtolength{\geometryTextHeightPdg}{- \geometryMarginBottom}
+	% \setlength{\textheight}{\geometryTextHeightPdg}
+
+
 	% Remove the rule at the bottom of the header
 	\renewcommand{\headrule}{\hrule height 0pt}
 
@@ -135,14 +216,18 @@
 	%	Set the footer of the first page
 	%
 	\fancyfoot[L]{
+		\vspace{ \footerOffset }
 		\FooterDefaultL
 	}
 
 	\fancyfoot[C]{
+		\vspace{ \footerOffset }
+		\rule{\textwidth}{\footrulewidth}
 		\FooterDefaultC
 	}
 
 	\fancyfoot[R]{
+		\vspace{ \footerOffset }
 		\FooterDefaultR
 	}
 }

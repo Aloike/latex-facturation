@@ -1,0 +1,83 @@
+\usepackage{layout} %%< Useful when working on geometry. Shows page layout with `\layout`.
+% \usepackage{showframe}  %%< Useful when working on geometry. Show document frames. Has to be loaded _after_ xcolor.
+
+
+\newlength{\geometryMarginTop}
+\setlength{\geometryMarginTop}{3cm}
+
+\newlength{\geometryMarginBottom}
+\setlength{\geometryMarginBottom}{3cm}
+
+\newlength{\geometryMarginLeft}
+\setlength{\geometryMarginLeft}{2cm}
+
+\newlength{\geometryMarginRight}
+\setlength{\geometryMarginRight}{2cm}
+
+
+\newlength{\geometryHeaderHeight}
+\setlength{\geometryHeaderHeight}{2cm}
+
+
+%%  Default geometry
+\geometry{
+	% verbose,
+	tmargin=\geometryMarginTop,
+	bmargin=\geometryMarginBottom,
+	lmargin=\geometryMarginLeft,
+	rmargin=\geometryMarginRight
+}
+
+%%  1 - "horizontal offset"
+\newlength{\geometryHorizontalOffset}
+\setlength{\geometryHorizontalOffset}{-1in}%< offset is added to a 1in margin, so remove it for calculations.
+\addtolength{\geometryHorizontalOffset}{\geometryMarginLeft} %< This will be the actual margin.
+\setlength{\hoffset}{\geometryHorizontalOffset}
+
+%%  2 - "vertical offset"
+\newlength{\geometryVerticalOffset}
+\setlength{\geometryVerticalOffset}{-1in}%< offset is added to a 1in margin, so remove it for calculations.
+\addtolength{\geometryVerticalOffset}{\geometryMarginTop} %< This will be the actual margin.
+\setlength{\voffset}{\geometryVerticalOffset}
+
+%%  3 - "Odd side" margin
+\setlength{\oddsidemargin}{0pt}
+
+%%  4 - Margin between the "vertical offset" + 1 inch and the top of the page.
+\setlength{\topmargin}{-25mm}
+
+%%  5 - Height of the header
+\setlength{\headheight}{\geometryHeaderHeight}
+
+%%  6 - Separation between header and text frame
+\setlength{\headsep}{5mm}
+
+%%  7 - Height of text body
+\newlength{\geometryTextHeight}
+\setlength{\geometryTextHeight}{\paperheight}
+\addtolength{\geometryTextHeight}{- \geometryMarginTop}
+\addtolength{\geometryTextHeight}{- \geometryMarginBottom}
+\setlength{\textheight}{\geometryTextHeight}
+
+%%  8 - Width of text body
+\newlength{\geometryTextWidth}
+\setlength{\geometryTextWidth}{\paperwidth}
+\addtolength{\geometryTextWidth}{- \geometryMarginLeft}
+\addtolength{\geometryTextWidth}{- \geometryMarginRight}
+\setlength{\textwidth}{\geometryTextWidth}
+
+%%  9 - Separation between text body and marge notes
+\setlength{\marginparsep}{5mm}
+
+%%  10 - Marge notes width
+\newlength{\geometryMargeNotesWidth}
+\setlength{\geometryMargeNotesWidth}{\geometryMarginRight}
+\addtolength{\geometryMargeNotesWidth}{- 5mm}
+\setlength{\marginparwidth}{\geometryMargeNotesWidth}
+
+%%  11 - Vertical offset between bottom of text body and bottom of footer
+\newlength{\geometryFootSkip}
+\setlength{\geometryFootSkip}{\geometryMarginBottom}
+% \addtolength{\geometryFootSkip}{- 5mm}
+\setlength{\footskip}{\geometryFootSkip}
+% \setlength{\footskip}{- \geometryMarginBottom}

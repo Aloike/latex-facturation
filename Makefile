@@ -1,5 +1,5 @@
-DIR_FACTURES:=factures
-# DIR_OUTPUT:=$(DIR_FACTURES)
+DIR_SRC:=factures
+# DIR_OUTPUT:=$(DIR_SRC)
 DIR_OUTPUT:=out
 
 
@@ -71,13 +71,13 @@ lColorRM        :="${COL_RED}"
 # ------------------------------------------------------------------------------
 
 
-#FILES_TEX:=$(shell (cd $(DIR_FACTURES) && ls -1 *.tex) )
-FILES_TEX:=$(shell (find $(DIR_FACTURES) -type f -iname '*.tex') )
+#FILES_TEX:=$(shell (cd $(DIR_SRC) && ls -1 *.tex) )
+FILES_TEX:=$(shell (find $(DIR_SRC) -type f -iname '*.tex') )
 # FILES_TEX:=$(shell (find * -type f -iname '*.tex') )
 # FILES_PDF:=$(FILES_TEX:.tex=.pdf)
 FILES_PDF:=$(addprefix $(DIR_OUTPUT)/,$(FILES_TEX:.tex=.pdf))
 
-#.PHONY: $(FILES_PDF) $(FILES_PDF:%=$(DIR_FACTURES)%)
+#.PHONY: $(FILES_PDF) $(FILES_PDF:%=$(DIR_SRC)%)
 
 
 
@@ -172,7 +172,7 @@ list:
 #
 ##  @brief  Generate all invoices.
 #
-world: $(FILES_PDF) #$(DIR_FACTURES)/*.pdf
+world: $(FILES_PDF) #$(DIR_SRC)/*.pdf
 
 
 
@@ -188,7 +188,7 @@ $(DIR_OUTPUT):
 ##  @brief  Default target to build PDFs from LaTeX files.
 #
 # %.pdf:%.tex
-# $(FILES_PDF): $(DIR_FACTURES)/%.pdf: $(DIR_FACTURES)/%.tex
+# $(FILES_PDF): $(DIR_SRC)/%.pdf: $(DIR_SRC)/%.tex
 $(FILES_PDF): $(DIR_OUTPUT)/%.pdf : %.tex $(DIR_OUTPUT)
 	@echo -e "${lColorDoc}    TEX $@${CLREOL}${FMT_CLR}" $(TRACE_LOG)
 #	# Multiple calls are needed to update references.
@@ -208,7 +208,7 @@ $(FILES_PDF): $(DIR_OUTPUT)/%.pdf : %.tex $(DIR_OUTPUT)
 #
 ##  @brief  Alias target to build PDF files without specifying the directory.
 #
-$(DIR_FACTURES)/%.pdf %.pdf %.tex: $(DIR_OUTPUT)/$(DIR_FACTURES)/%.pdf
+$(DIR_SRC)/%.pdf %.pdf %.tex: $(DIR_OUTPUT)/$(DIR_SRC)/%.pdf
 	@echo "make $@" $(TRACE_REDIRECT)
 
 
@@ -217,5 +217,5 @@ $(DIR_FACTURES)/%.pdf %.pdf %.tex: $(DIR_OUTPUT)/$(DIR_FACTURES)/%.pdf
 ##  @brief  Alias target to build PDF files without specifying the directory nor
 ##          the extension.
 #
-%: $(DIR_OUTPUT)/$(DIR_FACTURES)/%.pdf
+%: $(DIR_OUTPUT)/$(DIR_SRC)/%.pdf
 	@echo "make $@" $(TRACE_REDIRECT)

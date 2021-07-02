@@ -1,18 +1,3 @@
-\usepackage[plainpages=false,
-    pdfcenterwindow=true,
-    pdftoolbar=false,
-    pdfmenubar=false,
-    pdfauthor={\CompanyName},
-    pdftitle={Facture \InvoiceNumber\ -- \CompanyName},
-    pdfsubject={Facture \InvoiceNumber},
-    pdfkeywords={},
-    pdfproducer={Latex with hyperref},
-    pdfcreator={pdflatex},
-    linkcolor=black,
-    citecolor=black,
-    filecolor=black,
-    urlcolor=black]{hyperref}
-
 % ##############################################################################
 % ##############################################################################
 %	Document
@@ -23,26 +8,47 @@
 
 \thispagestyle{pagestyle_firstpage}
 
-%%  Default geometry
-\newgeometry{
-	tmargin=2cm,
-	bmargin=3cm,
-	lmargin=2cm,
-	rmargin=2cm
-}
+% %  Géometrie page de garde
+% \newgeometry{
+%     tmargin=1cm,
+%     bmargin=3cm,
+%     lmargin=2cm,
+%     rmargin=2cm
+% }
 
-%%  Géometrie page de garde
-\newgeometry{
-    tmargin=1cm,
-    bmargin=3cm,
-    lmargin=2cm,
-    rmargin=2cm
-}
+% %%  Default geometry
+% \newgeometry{
+% 	tmargin=2cm,
+% 	bmargin=3cm,
+% 	lmargin=2cm,
+% 	rmargin=2cm
+% }
 
 %%  Trick to reset geometry on second page;
 %%  See https://tex.stackexchange.com/a/478566/166035
 %%  This line registers the reset-hook:
-\AddEverypageHook{\ifnum\value{page}=2\restoregeometry\else\fi}
+% \AddEverypageHook{
+%     \ifnum\value{page}=1
+%         %%  Géometrie page de garde
+%         \newgeometry{
+%             a4paper,
+%             tmargin=1cm,
+%             bmargin=3cm,
+%             lmargin=2cm,
+%             rmargin=2cm
+%         }
+%         % \setlength{\textheight}{\paperheight}
+%         % \addtolength{\textheight}{ - 4cm }
+%     \else
+%         % %%  Default geometry
+%         % \newgeometry{
+%         %     tmargin=3cm,
+%         %     bmargin=3cm,
+%         %     lmargin=2cm,
+%         %     rmargin=2cm
+%         % }
+%     \fi
+% }
 
 
 % ------------------------------------------------------------------------------
@@ -75,7 +81,8 @@
 % \vspace{10mm}
 
 \ProductsTable{}
-\InvoiceComplementaryInfos
+
+\InvoiceComplementaryInfosSection
 
 
 % ------------------------------------------------------------------------------
@@ -85,13 +92,33 @@
 % Fill all the available vertical space
 \vfill
 \vfill
-% \hrulefill
-\doublerulefill
-\vspace{1em}
+\begin{minipage}{\textwidth}
+    % \hrulefill
+    \doublerulefill
+    \vspace{1em}
 
-\PaymentConditions
+    \PaymentConditions
 
-% \vspace{1em}
-% \doublerulefill
+    \vspace{1em}
+    \doublerulefill
+\end{minipage}
+
+
+% ------------------------------------------------------------------------------
+%	Insert items details
+% ------------------------------------------------------------------------------
+
+\newpage
+\section{Detailed items}
+
+\ProductsDetailsSections
+
+
+% ------------------------------------------------------------------------------
+%	Insert visas area
+% ------------------------------------------------------------------------------
+
+\signatureZone
+
 
 \end{document}

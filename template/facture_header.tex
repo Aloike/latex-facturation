@@ -7,7 +7,6 @@
 \usepackage[a4paper]{geometry}
 \usepackage{units}
 \usepackage{graphicx}
-\usepackage{fancyhdr}
 \usepackage{fp}
 \usepackage{soul}
 
@@ -15,10 +14,23 @@
 \usepackage{booktabs}
 \usepackage{etoolbox}
 \usepackage{eurosym}
-\usepackage{everypage} 	%use this package to get the "on-every-page-do-this-Hook" below
+% \usepackage{everypage} 	%use this package to get the "on-every-page-do-this-Hook" below
+\usepackage[plainpages=false,
+    pdfcenterwindow=true,
+    pdftoolbar=false,
+    pdfmenubar=false,
+    pdfauthor={\CompanyName},
+    pdftitle={Facture \InvoiceNumber\ -- \CompanyName},
+    pdfsubject={Facture \InvoiceNumber},
+    pdfkeywords={},
+    pdfproducer={Latex with hyperref},
+    pdfcreator={pdflatex},
+    linkcolor=black,
+    citecolor=black,
+    filecolor=black,
+    urlcolor=black]{hyperref}
 \usepackage{lastpage}
 \usepackage{layouts}
-% \usepackage{showframe}  %%< Useful when working on geometry.
 
 
 \usepackage{ltablex} % Imports tabularx
@@ -29,8 +41,10 @@
 \definecolor{subduedColor}{rgb}{0.45,0.45,0.45}% dark grey
 
 
-\input{.input/style.tex}
-\input{.input/utils.tex}
+\input{template/geometry_default.tex}
+\input{template/style.tex}
+\input{template/utils.tex}
+\input{template/utils/signature.tex}
 
 
 %% Taux de la TVA
@@ -86,16 +100,22 @@
 
 % ##############################################################################
 % ##############################################################################
+\def\InvoiceComplementaryInfos{}
 
-\newcommand*{\InvoiceComplementaryInfos}{
-	\textbf{Informations complémentaires :}~\\
-	\small
-	Paiement sous 10 jours après réception.
+\newcommand*{\InvoiceComplementaryInfosSection}{
+	{
+		\setlength{\parindent}{0pt}
+		% \textbf{Informations complémentaires :}~\\
+		\paragraph{Informations complémentaires :}%~\\
+		\small
+		\paragraph{}
+		% XXX /!\ POUR LES AUTOENTREPRENEURS TOUT EST FACTURÉ HT /!\
+		TVA non applicable conformément à \href{https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042159618/}{l'Article 293 B du CGI}.
+		\paragraph{}
+		Paiement sous 10 jours après réception.
 
-	% XXX /!\ POUR LES AUTOENTREPRENEURS TOUT EST FACTURÉ HT /!\
-	TVA non applicable conformément à \href{https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042159618/}{l'Article 293 B du CGI}.
-
-	% \InvoiceDetails
+		\InvoiceComplementaryInfos
+	}
 }
 
 % ##############################################################################
@@ -269,6 +289,58 @@
 	% \eaddto\ProductsList{#1	&	\prix	&	#2	&	\montant	\cr}
 	\eaddto\ProductsList{#1	&	\prix	&	#2	&	\montant}
 }
+
+% ##############################################################################
+% ##############################################################################
+\newcounter{counterRefsDetailedItems}
+% \newcommand{\refDetailedItemLabel}{ref_detailedItem_unknown}
+
+%%  @brief  Ajoute une ligne dans le tableau des produits à facturer et un
+%%          paragraphe descriptif en fin de document.
+%%
+%%  @param  #1  Désignation du produit
+%%  @param  #2  Quantité de produits à facturer
+%%  @param  #3  Prix unitaire HT du produit
+%%  @param  #4  Paragraphe descriptif.
+%
+\newcommand{\ProductAddWithDetails}[4]{
+	\FPround{\prix}{#3}{2}
+	\FPeval{\montant}{#2 * #3}
+	\FPround{\montant}{\montant}{2}
+	\FPadd{\TotalHT}{\TotalHT}{\montant}
+
+	% Increment refs counter
+	\addtocounter{counterRefsDetailedItems}{1}
+	\edef\refDetailedItemLabel{ref_detailedItem_\thecounterRefsDetailedItems}
+	\message{the detailed item ref label is: \refDetailedItemLabel}
+
+
+	\ifdefempty{\ProductsList}{}{
+		\eaddto\ProductsList{\cr}
+	}
+
+	\eaddto\ProductsList{#1 \mbox{\noexpand\hyperref[\refDetailedItemLabel]{\noexpand\textit{(see details)}}}	&	\prix	&	#2	&	\montant}
+
+
+	%
+	%   Add the product details paragraph
+	%
+
+	% Add the section title
+	\eaddto\ProductsDetailsSections{
+		\noexpand\subsection{#1} \noexpand\label{\refDetailedItemLabel}
+	}
+
+	% Add the section content
+	\addto\ProductsDetailsSections{
+		#4
+	}
+}
+
+% ##############################################################################
+% ##############################################################################
+
+\newcommand{\ProductsDetailsSections}{}
 
 % ##############################################################################
 % ##############################################################################
