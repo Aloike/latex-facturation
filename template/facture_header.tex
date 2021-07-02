@@ -99,16 +99,22 @@
 
 % ##############################################################################
 % ##############################################################################
+\def\InvoiceComplementaryInfos{}
 
-\newcommand*{\InvoiceComplementaryInfos}{
-	\textbf{Informations complémentaires :}~\\
-	\small
-	Paiement sous 10 jours après réception.
+\newcommand*{\InvoiceComplementaryInfosSection}{
+	{
+		\setlength{\parindent}{0pt}
+		% \textbf{Informations complémentaires :}~\\
+		\paragraph{Informations complémentaires :}%~\\
+		\small
+		\paragraph{}
+		% XXX /!\ POUR LES AUTOENTREPRENEURS TOUT EST FACTURÉ HT /!\
+		TVA non applicable conformément à \href{https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042159618/}{l'Article 293 B du CGI}.
+		\paragraph{}
+		Paiement sous 10 jours après réception.
 
-	% XXX /!\ POUR LES AUTOENTREPRENEURS TOUT EST FACTURÉ HT /!\
-	TVA non applicable conformément à \href{https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042159618/}{l'Article 293 B du CGI}.
-
-	% \InvoiceDetails
+		\InvoiceComplementaryInfos
+	}
 }
 
 % ##############################################################################
