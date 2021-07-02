@@ -1,0 +1,126 @@
+\usepackage{eforms}
+
+
+\newif\ifSignatureZone
+\SignatureZonetrue
+
+% ##############################################################################
+% ##############################################################################
+%
+%%
+%%  @see    https://tex.stackexchange.com/a/52811/166035
+%
+\newcommand{\signatureZone}{
+	\ifSignatureZone
+		% \paragraph{Visas}
+		% \textbf{Visas}
+		% Signature.
+		% \sigField{My signature}{5cm}{3cm}
+		\vfill
+		\begin{minipage}{\textwidth}
+		\textbf{Visas}
+		% \paragraph{Visas}
+		% \mySigField{signature_company}{8cm}{2.5cm}{Representative Name}{The Position}
+		% \begin{tabularx}{\textwidth}{|X|X|}
+		% \begin{tabularx}{\textwidth}{@{}|*2{>{\centering\arraybackslash}X}|@{}}
+		\newcolumntype{Y}{>{\centering\arraybackslash}X}
+		\begin{tabularx}{\textwidth}{|Y|Y|}
+			% \aboverulesep=0ex
+			% \hline \cr test \cr
+			% \midrule
+			\specialrule{\cmidrulewidth}{0pt}{0pt}
+			\rowcolor{gray!25}
+			% \CompanyName & Client \\
+			\CompanyName & \ClientNom \\
+			\endfirsthead
+			% \midrule
+			\specialrule{\cmidrulewidth}{0pt}{0pt}
+		\signatureField{signature_company}{\linewidth}{2.5cm}{\CompanyRepresentativeName}{\CompanyRepresentativePosition}{\today} & \signatureField{signature_company}{\linewidth}{2.5cm}{}{}{} \cr
+			% \hline
+			\specialrule{\cmidrulewidth}{0pt}{0pt}
+		\end{tabularx}
+		\end{minipage}
+	\else
+	\fi
+}
+
+% ##############################################################################
+% ##############################################################################
+
+\def\colFeat{blue!50!black} %Feature Color 1 for Main Color Theme.
+
+\def\WS{8cm}
+\def\HS{2.5cm}
+
+\makeatletter
+    \def\eq@SigField{%
+        \centerWidget\eq@rectH%
+        \if\autoCenter n\eqcenterWidget=0pt\fi%
+        \leavevmode\hbox{\pdfstartlink user{\common@SigFieldCode}%
+                \lower\eqcenterWidget\Bbox{\eq@rectW}{\eq@rectH}\pdfendlink%
+        }%
+        \endgroup%
+    }
+\makeatother
+
+
+\newcommand{\signatureField}[6]{
+
+	\def\pFieldKey{#1}
+	\def\pWidth{#2}
+	\def\pHeight{#3}
+	\def\pName{#4}
+	\def\pPosition{#5}
+	\def\pDate{#6}
+	\def\inputsWidth{6cm}
+
+	\begin{varwidth}{\pWidth}
+		\textcolor{\colFeat}{
+			% Table with name, position, date
+			\begin{tabular}{rl}
+				% \vspace{0.5em}
+				% \raggedleft Name: & \ifthenelse{\equal{\pName}{}}{\TextField[name=name\pFieldKey,width=\inputsWidth]{}}{\pName} \cr% \\\\[-3mm]
+				% \raggedleft Name: & \ifthenelse{\equal{\pName}{}}{\TextField[name=name\pFieldKey,width=\inputsWidth]{}}{\pName} \cr% \\\\[-3mm]
+				\raggedleft Name: & \TextField[name=name\pFieldKey,width=\inputsWidth,default=\pName]{} \cr% \\\\[-3mm]
+				% \vspace{0.5em}
+				\raggedleft Position: & \TextField[name=pos\pFieldKey,width=\inputsWidth,default=\pPosition]{} \cr
+				% \vspace{0.5em}
+				% \raggedleft Date: & \ifthenelse{\equal{\pName}{}}{\TextField[name=date\pFieldKey,width=\inputsWidth]{}}{#6} \cr% \\\\[-3mm]
+				\raggedleft Date: & \TextField[name=date\pFieldKey,width=\inputsWidth,default=\pDate]{} \cr
+			\end{tabular} \\
+			% Separation between Identification and signature
+			% \rule{\pWidth+3mm}{2pt}\\[2mm]
+			\rule{\pWidth}{2pt}\\
+			% Signature area
+			\fcolorbox{black!5!white}{black!5!white}{
+				\sigField[\Lock{/Action/Include/Fields [(name\pFieldKey)(pos\pFieldKey)(date\pFieldKey)]}]{\pFieldKey}{\pWidth - 4mm}{\pHeight}
+				% \ifthenelse{\equal{\pName}{}}%
+				% {
+				% 	% If no person name given
+				% 	\ifthenelse{\equal{\pPosition}{}}%
+				% 	{
+				% 		\sigField[\Lock{/Action/Include/Fields [(name\pFieldKey)(pos\pFieldKey)]}]{\pFieldKey}{\pWidth}{\pHeight}
+				% 	}%
+				% 	{
+				% 		\sigField[\Lock{/Action/Include/Fields [(name\pFieldKey)]}]{\pFieldKey}{\pWidth}{\pHeight}
+				% 	}%
+				% }%
+				% {
+				% 	% If a person name has been given
+				% 	\ifthenelse{\equal{\pPosition}{}}%
+				% 	{
+				% 		% If a person position hasn't been given
+				% 		\sigField[\Lock{/Action/Include/Fields [(pos\pFieldKey)]}]{\pFieldKey}{\pWidth}{\pHeight}
+				% 	}%
+				% 	{
+				% 		% If a person position has been given
+				% 		\sigField{\pFieldKey}{\pWidth}{\pHeight}
+				% 	}%
+				% }%
+			}\\%[1mm]
+		}
+	\end{varwidth}
+}
+
+% ##############################################################################
+% ##############################################################################
