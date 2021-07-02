@@ -325,11 +325,14 @@
 	%
 	%   Add the product details paragraph
 	%
-	% \ifdefempty{\ProductsDetailsSections}{}{
-	% 	\addto\ProductsDetailsSections{\cr}
-	% }
+
+	% Add the section title
 	\eaddto\ProductsDetailsSections{
 		\noexpand\subsection{#1} \noexpand\label{\refDetailedItemLabel}
+	}
+
+	% Add the section content
+	\addto\ProductsDetailsSections{
 		#4
 	}
 }
