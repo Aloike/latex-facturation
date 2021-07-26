@@ -54,7 +54,7 @@ fi
 
 # Count the invoices in the directory
 STR_INVOICE_PREFIX="Facture${DATE_CURRENT_YEAR}"
-lCurrentYearInvoicesCount=`ls -1 ${DIR_INVOICES_THISYEAR}/${STR_INVOICE_PREFIX}* | wc -l`
+lCurrentYearInvoicesCount=`find ${DIR_INVOICES_THISYEAR}/ -mindepth 1 -maxdepth 1 -type d -name "${STR_INVOICE_PREFIX}*" | wc -l`
 ${CMD_LOG_DBG} "lCurrentYearInvoicesCount=${lCurrentYearInvoicesCount}"
 
 
