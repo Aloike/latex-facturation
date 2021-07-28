@@ -20,7 +20,7 @@
     pdftoolbar=false,
     pdfmenubar=false,
     pdfauthor={\CompanyName},
-    pdftitle={Facture \InvoiceNumber\ -- \CompanyName},
+    pdftitle={Facture \InvoiceNumber\ --\ \CompanyName},
     pdfsubject={Facture \InvoiceNumber},
     pdfkeywords={},
     pdfproducer={Latex with hyperref},
@@ -54,7 +54,7 @@
 \def\TotalHT{0}
 \def\TotalTVA{0}
 
-\def\_header_spacingLeft{8.0cm}
+\def\_header_spacingLeft{8.0 cm}
 
 \newcommand*{\itemizationHeaderStyle}[0]{\normalsize\color{highlightColor}}
 
@@ -71,14 +71,6 @@
 % ##############################################################################
 % ##############################################################################
 
-\newcommand{\infoBox}[2]{
-	{\titleStyle #1} & \begin{minipage}[t]{.35\textwidth} #2 \end{minipage} \\
-	\noalign{\addvspace{2ex}}
-}
-
-% ##############################################################################
-% ##############################################################################
-
 \def\titleStyle{\color{highlightColor}}
 
 \newcommand*{\infoSubStyle}{\small\slshape}
@@ -90,10 +82,10 @@
 	% \begin{minipage}[t]{.4\linewidth} {
 	\begin{minipage}[t]{.5\textwidth} {
 		% \Huge 
-		\textbf{\CompanyName} \\
-		\CompanyAddress \\
-		Tel: \CompanyPhone \\
-		E-mail:  \href{mailto:\CompanyEmail}{\texttt{\CompanyEmail}} \\
+		\textbf{\CompanyName} \newline
+		\CompanyAddress \newline
+		Tel: \CompanyPhone \newline
+		E-mail:  \href{mailto:\CompanyEmail}{\texttt{\CompanyEmail}} \newline
 	}
 	\end{minipage}
 }
@@ -101,20 +93,24 @@
 % ##############################################################################
 % ##############################################################################
 \def\InvoiceComplementaryInfos{}
+\def\InvoiceComplementaryInfosItems{
+	% XXX /!\ POUR LES AUTOENTREPRENEURS TOUT EST FACTURÉ HT /!\
+	\item	TVA non applicable conformément à
+		\href{https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042159618/}{l'Article 293 B du CGI}.
+}
 
 \newcommand*{\InvoiceComplementaryInfosSection}{
 	{
 		\setlength{\parindent}{0pt}
 		% \textbf{Informations complémentaires :}~\\
-		\paragraph{Informations complémentaires :}%~\\
+		\paragraph{Informations complémentaires:}%~\\
 		\small
 		\paragraph{}
-		% XXX /!\ POUR LES AUTOENTREPRENEURS TOUT EST FACTURÉ HT /!\
-		TVA non applicable conformément à \href{https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000042159618/}{l'Article 293 B du CGI}.
-		\paragraph{}
-		Paiement sous 10 jours après réception.
-
 		\InvoiceComplementaryInfos
+		\begin{itemize}
+			\item Paiement sous 10 jours après réception.
+			\InvoiceComplementaryInfosItems
+		\end{itemize}
 	}
 }
 
@@ -167,12 +163,12 @@
 
 \newcommand*{\MinipageClientContact}{
 	\begin{minipage}[t]{.5\textwidth}{
-		\textcolor{subduedColor}{Client :}\\
+		\textcolor{subduedColor}{Client:}\\
 		\textbf{\ClientNom} \\
 		\ClientAdresse\\
 		% \\ %\vspace{1.2em}
-		E-mail : \href{mailto:\ClientEmail}{\ClientEmail}\\
-		Tel. : \ClientPhone
+		E-mail: \href{mailto:\ClientEmail}{\ClientEmail}\\
+		Tel.: \ClientPhone
 	}
 	\end{minipage}
 }
@@ -181,20 +177,8 @@
 % ##############################################################################
 
 \newcommand*{\MinipageClientInvoiceAddress}{
-	% \begin{minipage}[t]{.5\textwidth} {
-	% 	% \Huge 
-	% 	\textbf{\CompanyName} \\
-	% 	\CompanyAddress \\
-	% 	Tel: \CompanyPhone \\
-	% 	E-mail:  \href{mailto:\CompanyEmail}{\texttt{\CompanyEmail}} \\
-	% }
-	% \end{minipage}
-	% \begin{infoSection}
-	% 	\infoBox{Facturation}{\textbf{\ClientNom} \\
-	% 	\ClientAdresse}
-	% \end{infoSection}
 	\begin{minipage}[t]{.5\textwidth}{
-		\textcolor{subduedColor}{Facturation :}\\
+		\textcolor{subduedColor}{Facturation:}\\
 		\textbf{\ClientNom} \\
 		\ifdef{\ClientAdresseInvoicing}{
 			\ClientAdresseInvoicing
@@ -252,7 +236,7 @@
 		\ifthenelse{\equal{\FactureAcquittee}{oui}}{
 			Facture acquittée.
 		}{
-			À régler par virement bancaire :
+			À régler par virement bancaire:
 			\begin{center}
 				\begin{tabular}{|c c c c|}
 					\midrule 	\itemizationHeaderStyle \textbf{Code BIC}		& \multicolumn{3}{|l|}{ \texttt{\CompanyBIC} } 		\\
@@ -293,7 +277,7 @@
 % ##############################################################################
 % ##############################################################################
 \newcounter{counterRefsDetailedItems}
-% \newcommand{\refDetailedItemLabel}{ref_detailedItem_unknown}
+% \newcommand{\myRefDetailedItemLabel}{refDetailedItemNbrUnknown}
 
 %%  @brief  Ajoute une ligne dans le tableau des produits à facturer et un
 %%          paragraphe descriptif en fin de document.
@@ -311,15 +295,15 @@
 
 	% Increment refs counter
 	\addtocounter{counterRefsDetailedItems}{1}
-	\edef\refDetailedItemLabel{ref_detailedItem_\thecounterRefsDetailedItems}
-	\message{the detailed item ref label is: \refDetailedItemLabel}
+	\edef\myRefDetailedItemLabel{refDetailedItemNbr\thecounterRefsDetailedItems}
+	\message{the detailed item ref label is: \myRefDetailedItemLabel}
 
 
 	\ifdefempty{\ProductsList}{}{
 		\eaddto\ProductsList{\cr}
 	}
 
-	\eaddto\ProductsList{#1 \mbox{\noexpand\hyperref[\refDetailedItemLabel]{\noexpand\textit{(see details)}}}	&	\prix	&	#2	&	\montant}
+	\eaddto\ProductsList{#1 \mbox{\noexpand\hyperref[\myRefDetailedItemLabel]{\noexpand\textit{(see details)}}}	&	\prix	&	#2	&	\montant}
 
 
 	%
@@ -328,7 +312,7 @@
 
 	% Add the section title
 	\eaddto\ProductsDetailsSections{
-		\noexpand\subsection{#1} \noexpand\label{\refDetailedItemLabel}
+		\noexpand\subsection{#1} \noexpand\label{\myRefDetailedItemLabel}
 	}
 
 	% Add the section content
