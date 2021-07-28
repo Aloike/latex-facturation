@@ -1,0 +1,5 @@
+CompanyBIC
+CompanyIBAN
+CompanyName
+CompanySiret
+InvoiceDate

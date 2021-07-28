@@ -6,7 +6,7 @@ set -e
 
 CMD_MKDIR='mkdir -pv'
 
-DIR_OUTPUT='out/'
+DIR_OUTPUT='out'
 
 
 HUNSPELL_CMD='hunspell'
@@ -39,8 +39,9 @@ TEXTIDOTE_OPTIONS+=" --check en"
 # TEXTIDOTE_OPTIONS+=",lt:en:MORFOLOGIK_RULE_EN_US" #!< "Possible spelling mistake found (1084) [lt:en:MORFOLOGIK_RULE_EN_US]""
 # TEXTIDOTE_OPTIONS+=",sh:nonp" #!< "If you are writing a research paper, do not force page breaks. [sh:nonp]"
 # TEXTIDOTE_OPTIONS+=",sh:figref" #!< "Figure sssss is never referenced in the text [sh:figref]"
-TEXTIDOTE_OPTIONS+=" --output html"
-# TEXTIDOTE_OPTIONS+=" --read-all"
+# TEXTIDOTE_OPTIONS+=" --output html"
+TEXTIDOTE_OPTIONS+=" --output plain"
+TEXTIDOTE_OPTIONS+=" --read-all"
 # TEXTIDOTE_OPTIONS+=" --remove-macros "
 TEXTIDOTE_OPTIONS+=" --type tex"
 
@@ -64,7 +65,7 @@ fi
 #
 ##  @see    https://github.com/mahito1594/docker-textidote
 #
-function	F_build_checkSpelling()
+function	F_build_textidote()
 {
 	echo ""
 	echo "========================================"
@@ -149,13 +150,23 @@ function	F_build_checkSpelling()
 	lContainerOptions+=" ${lRemoveRules}"
 	lContainerOptions+=" master.tex"
 
-	${CMD_LOG_DBG} "Running container with arguments: ${lContainerOptions}"
-	docker run \
+	local lTextidoteOutputHtml="$(pwd)/${DIR_OUTPUT}/textidote-report.html"
+
+	${CMD_LOG_DBG} "==> Running container with arguments: ${lContainerOptions}"
+	if ! docker run \
 		--rm \
 		-v $PWD:/work \
 		"${TEXTIDOTE_DOCKER_IMAGE}" \
 		${lContainerOptions} \
-		> "${DIR_OUTPUT}/textidote-report.html"
+		> "${lTextidoteOutputHtml}"
+	then
+		cat "${lTextidoteOutputHtml}"
+
+		echo 	"TeXtidote returned with an error." \
+			" Please see output at: '${lTextidoteOutputHtml}'."
+
+		exit 1
+	fi
 }
 
 # ##############################################################################
@@ -173,23 +184,26 @@ function	F_build_main()
 
 	${CMD_LOG_DBG} "pInvoiceDirPath=${pInvoiceDirPath}"
 
+	# Change the working directory to be the folder containing the sources.
 	pushd "${pInvoiceDirPath}"
 
-
-	F_build_spelling
-
-
+	# Create the output directory if it doesn't exist
 	if [[ ! -d "${DIR_OUTPUT}" ]]
 	then
 		${CMD_MKDIR} "${DIR_OUTPUT}"
 	fi
 
 
+	# Spellchecking with Hunspell
+	F_build_hunspell
+
+
+	# Run a TeXtidote analysis if enabled.
 	if [[ "${TEXTIDOTE_ENABLED}" -eq "0" ]]
 	then
 		${CMD_LOG_DBG} "TeXtidote is disabled."
 	else
-		F_build_checkSpelling
+		F_build_textidote
 	fi
 
 
@@ -199,9 +213,9 @@ function	F_build_main()
 # ##############################################################################
 # ##############################################################################
 #
-##  @see    https://github.com/mahito1594/docker-textidote
+##
 #
-function	F_build_spelling()
+function	F_build_hunspell()
 {
 	echo ""
 	echo "========================================"
@@ -210,7 +224,10 @@ function	F_build_spelling()
 
 	local	lHunspellOutputFile="${DIR_OUTPUT}/hunspell.txt"
 	
-	
+	# Create the output file to be sure it exists
+	touch "${lHunspellOutputFile}"
+
+
 	${CMD_LOG_DBG} "HUNSPELL_OPTIONS=${HUNSPELL_OPTIONS}"
 
 	#! Sed on the input file to avoind spell-checking the content of
@@ -280,3 +297,8 @@ function	F_build_tex()
 # ##############################################################################
 
 F_build_main ${@}
+
+echo "========================================"
+echo "    Done."
+
+exit $?

@@ -9,25 +9,20 @@
 % Désignation facture
 % ------------------------------------------------------------------------------
 %%  @brief  Date de l'émission de la facture.
-\def\InvoiceDate		{05 Mai 2021}
+\def\InvoiceDate		{01 Janvier 1970}
 
 %%  @brief  Numérotation de la facture.
-\def\InvoiceNumber		{YYYYMMNNN}
+\def\InvoiceNumber		{YYYYNNNNN}
 
-\def\CompanyInternalRef {PYYYY-NNN}
-\def\ClientInternalRef  {12345678901234567890}
+\def\CompanyInternalRef {PYYYY-000}
+\def\ClientInternalRef  {Client's reference}
 
 
 % Lieu de l'édition de la facture
-\def\FactureLieu	{InvoiceCity}
+\def\FactureLieu	{Invoice City}
 
 %%  @brief  Objet du document
 \def\InvoiceSubject	{Facture pour prestations d'ingénierie.}
-
-%%  @brief  Description de la facture
-\def\InvoiceDetails	{
-    Description de la réalisation.
-}
 
 
 % ------------------------------------------------------------------------------
@@ -39,16 +34,17 @@
 
 %%  @brief  Adresse postale du client.
 \def\ClientAdresse{
-    Bâtiment X \newline
-    46 RUE DES FACTRICES \newline
-    87160 ARNAC LA POSTE CEDEX 7
+    Nom Contact \newline
+    Adresse \newline
+    CCPPP VILLE \newline
+    Pays
 }
 
 %%  @brief  Adresse email du client.
 \def\ClientEmail{contact-client@example.com}
 
 %%  @brief  Num de téléphone du client.
-\def\ClientPhone{+33(0)N NN NN NN NN}
+\def\ClientPhone{+33(0)0.00.00.00.00}
 
 %%  @brief  Adresse de facturation, si différente de l'adresse principale.
 \def\ClientAdresseInvoicing{
@@ -67,13 +63,45 @@
 % infos and also defines elements needed in the following product lines.
 \input{template/facture_header.tex}
 
-
-\ProductAdd	{Élement} {1} {1337}
-\ProductAdd	{Autre élement} {42} {4.04}
-\ProductAdd	{Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.} {45} {418}
-
+%% Uncomment the following line to add a "DRAFT" watermark to the output.
 % \usepackage{draftwatermark}
 
+
+\usepackage{amssymb}   %!< To have access to some more symbols.
+
+
+\ProductAdd{
+    Produit %avec une faute ``d'ortografe`` (pour test verification orthographique).
+}
+{1}{2}
+
+% ------------------------------------------------------------------------------
+
+\ProductAddWithDetails{
+    Produit avec détails
+}
+{3}{4}
+{
+Exemple de ligne de facturation détaillée.
+% \par
+% Ici un nom de fichier: \verb|/nom_de_fichier.ex|
+\paragraph{Livrables:}
+Une liste de livrables:
+\begin{list}{$\square$}{}
+    \item   Premier livrable.
+    \item   Deuxième livrable.
+\end{list}
+}
+
+% ------------------------------------------------------------------------------
+
+\ProductAdd	{Element} {1} {1337}
+\ProductAdd	{Other element} {42} {4.04}
+\ProductAdd	{
+    This is a long element description to test how it is displayed in the output
+    table; it should occupy more than a line.
+} {45} {418}
+
 \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
 \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
 \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
@@ -93,10 +121,32 @@
 \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
 \ProductAdd	{This is just a test line to test long invoices.}{1}{0}
 
-\ProductAddWithDetails	{This is to test detailed product line.}{1}{2}{This is the details subsection.}
-\ProductAddWithDetails	{This is to test another detailed product line.}{10}{20}{This is another details subsection.}
+\ProductAddWithDetails{This is to test detailed product line.}{1}{2}{This is a subsection that provides details.}
+\ProductAddWithDetails{This is to test another detailed product line.}{10}{20}
+{
+    Yet another subsection containing details.
+    \paragraph{Output:}
+    A list of items:
+    \begin{list}{$\square$}{}
+        \item   A first item.
+        \item   A second item.
+    \end{list}
+}
 
+% ------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
 
+\addto\InvoiceComplementaryInfos{
+    % \par
+    Quelques ``infos complémentaires``.
+}
+
+% ------------------------------------------------------------------------------
+
+\addto\InvoiceComplementaryInfosItems{
+    \item   Il est possible d'ajouter des informations complémentaires sous
+            forme de liste.
+}
 
 % ------------------------------------------------------------------------------
 %   Détails acquittement
@@ -105,5 +155,11 @@
 \def\FactureAcquittee	{non}
 
 
+% ------------------------------------------------------------------------------
+%   Zone pour signature
+% ------------------------------------------------------------------------------
+\SignatureZonetrue
 
+
+%% Import de la structure du document de sortie.
 \input{template/facture_document.tex}
